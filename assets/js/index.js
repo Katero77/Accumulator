@@ -1,13 +1,40 @@
+"use strict";
+
+
+/**
+ * 
+ * @param {number} startingValue
+ * @returns object 
+ */
+
+
 function Accumulator(startingValue) {
-  this.value = startingValue;
-
-  this.read = function() {
-    this.value += +prompt('Сколько нужно добавить?', 0);
-  };
-
+ if(!new.target){
+  return new Accumulator(startingValue);
+}
+  this.value = isFinite(startingValue) ? +startingValue : 0;
 }
 
-let accumulator = new Accumulator(1);
+function AccumulatorProto(){
+  if(!new.target){
+    return new AccumulatorProto();
+  }
+  this.read = function() {
+    while(true){
+      const userValue = +prompt("number");
+      if(!isNaN(userValue)){
+        this.value += userValue;
+        break;
+      }
+      else{
+        alert("Invalid input. Try again!");
+      }
+    }
+  };
+}
+Accumulator.prototype = new AccumulatorProto();
+
+const accumulator = new Accumulator();
 accumulator.read();
 accumulator.read();
-alert(accumulator.value);
+console.log(accumulator.value);
